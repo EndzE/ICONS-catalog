@@ -19,6 +19,16 @@
       "name": "dark",
       "bucket": "main",
       "tier": "core"
+    },
+    {
+      "name": "rufus",
+      "bucket": "extras",
+      "tier": "catalog"
+    },
+    {
+      "name": "ventoy",
+      "bucket": "extras",
+      "tier": "catalog"
     }
   ]
 }
