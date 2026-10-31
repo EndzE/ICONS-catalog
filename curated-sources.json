@@ -4,6 +4,11 @@
       "name": "aria2-next",
       "bucket": "main",
       "tier": "core"
+    },
+    {
+      "name": "7zip",
+      "bucket": "main",
+      "tier": "core"
     }
   ]
 }
