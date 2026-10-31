@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-10-31T06:42:04.011266+00:00",
+  "last_updated": "2026-10-31T06:51:00+00:00",
   "packages": {
     "aria2-next": {
       "version": "3.0.9",
@@ -39,6 +39,24 @@
           "hash": "86d5790d5dd84cab4636c3bb7fab10d3ed7cd3e57e6119401bd2769e28165268"
         }
       }
+    },
+    "innounp": {
+      "version": "2.71.2",
+      "tier": "core",
+      "description": "Inno Setup Unpacker (Unicode)",
+      "homepage": "https://www.rathlev-home.de/tools/prog-e.html#unpack",
+      "license": "GPL-3.0-only",
+      "url": "https://raw.githubusercontent.com/jrathlev/InnoUnpacker-Windows-GUI/refs/heads/master/innounp-2/bin/innounp-2.zip",
+      "hash": "10fce27b6344b7674d5625cc34afca1c88c12183d957c6d93e401097fa2556cd"
+    },
+    "dark": {
+      "version": "3.14.1",
+      "tier": "core",
+      "description": "WiX (Windows Installer XML) Toolset Decompiler",
+      "homepage": "https://wixtoolset.org/",
+      "license": "MS-RL",
+      "url": "https://raw.githubusercontent.com/ScoopInstaller/Binary/master/dark/dark-3.14.1.zip",
+      "hash": "cad986d43d59ed27c711b15113ea118c3a600c7e625130201ba946bcc70f5905"
     }
   }
 }
