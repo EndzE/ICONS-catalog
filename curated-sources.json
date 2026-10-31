@@ -1,0 +1,9 @@
+{
+  "packages": [
+    {
+      "name": "aria2-next",
+      "bucket": "main",
+      "tier": "core"
+    }
+  ]
+}
