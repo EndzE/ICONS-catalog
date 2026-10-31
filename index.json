@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-10-31T11:14:43.797073+00:00",
+  "last_updated": "2026-10-31T16:58:01.178381+00:00",
   "packages": {
     "aria2-next": {
       "version": "3.0.9",
@@ -41,13 +41,13 @@
       }
     },
     "innounp": {
-      "version": "2.71.2",
+      "version": "2.71.3",
       "tier": "core",
       "description": "Inno Setup Unpacker (Unicode)",
       "homepage": "https://www.rathlev-home.de/tools/prog-e.html#unpack",
       "license": "GPL-3.0-only",
       "url": "https://raw.githubusercontent.com/jrathlev/InnoUnpacker-Windows-GUI/refs/heads/master/innounp-2/bin/innounp-2.zip",
-      "hash": "10fce27b6344b7674d5625cc34afca1c88c12183d957c6d93e401097fa2556cd"
+      "hash": "f8e45c9676bebc7d7570108ab572673b541fcf7a7d3d24a04319ac6b5315b4e8"
     },
     "dark": {
       "version": "3.14.1",
