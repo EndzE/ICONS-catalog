@@ -69,16 +69,31 @@ jobs:
                   with open(manifest_path, 'r', encoding='utf-8') as mf:
                       data = json.load(mf)
 
+                  license_val = data.get("license", "")
+                  if isinstance(license_val, dict):
+                      license_str = license_val.get("identifier", "")
+                  else:
+                      license_str = str(license_val)
+
                   pkg_info = {
                       "version": data.get("version"),
                       "tier": tier,
                       "description": data.get("description", ""),
                       "homepage": data.get("homepage", ""),
-                      "license": data.get("license", "")
+                      "license": license_str
                   }
 
                   if "architecture" in data:
-                      pkg_info["architecture"] = data["architecture"]
+                      arch_map = {}
+                      for arch_name, arch_val in data["architecture"].items():
+                          if isinstance(arch_val, dict):
+                              arch_entry = {}
+                              if "url" in arch_val:
+                                  arch_entry["url"] = arch_val["url"]
+                              if "hash" in arch_val:
+                                  arch_entry["hash"] = arch_val["hash"]
+                              arch_map[arch_name] = arch_entry
+                      pkg_info["architecture"] = arch_map
                   elif "url" in data:
                       pkg_info["url"] = data.get("url")
                       if "hash" in data:
