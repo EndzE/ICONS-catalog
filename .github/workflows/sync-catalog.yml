@@ -23,8 +23,9 @@ jobs:
 
       - name: Sync upstream manifests
         run: |
-          echo "Cloning ScoopInstaller/Main..."
+          echo "Cloning ScoopInstaller/Main and ScoopInstaller/Extras..."
           git clone --depth 1 https://github.com/ScoopInstaller/Main.git /tmp/scoop-main
+          git clone --depth 1 https://github.com/ScoopInstaller/Extras.git /tmp/scoop-extras
 
           mkdir -p bucket
 
@@ -36,17 +37,25 @@ jobs:
           with open('curated-sources.json', 'r', encoding='utf-8') as f:
               sources = json.load(f)
 
+          bucket_dirs = {
+              "main": "/tmp/scoop-main/bucket",
+              "extras": "/tmp/scoop-extras/bucket"
+          }
+
           for pkg in sources.get('packages', []):
               name = pkg['name']
-              bucket = pkg.get('bucket', 'main')
-              if bucket == 'main':
-                  src = f"/tmp/scoop-main/bucket/{name}.json"
+              bucket_name = pkg.get('bucket', 'main')
+              bucket_dir = bucket_dirs.get(bucket_name)
+              if bucket_dir:
+                  src = f"{bucket_dir}/{name}.json"
                   dst = f"bucket/{name}.json"
                   if os.path.exists(src):
                       shutil.copy2(src, dst)
-                      print(f"Synced {name} from {bucket}")
+                      print(f"Synced {name} from {bucket_name}")
                   else:
                       print(f"Warning: {src} not found")
+              else:
+                  print(f"Warning: unknown bucket {bucket_name}")
           EOF
 
       - name: Generate index.json
@@ -83,18 +92,20 @@ jobs:
                       "license": license_str
                   }
 
+                  has_arch_urls = False
                   if "architecture" in data:
                       arch_map = {}
                       for arch_name, arch_val in data["architecture"].items():
-                          if isinstance(arch_val, dict):
-                              arch_entry = {}
-                              if "url" in arch_val:
-                                  arch_entry["url"] = arch_val["url"]
+                          if isinstance(arch_val, dict) and "url" in arch_val:
+                              has_arch_urls = True
+                              arch_entry = {"url": arch_val["url"]}
                               if "hash" in arch_val:
                                   arch_entry["hash"] = arch_val["hash"]
                               arch_map[arch_name] = arch_entry
-                      pkg_info["architecture"] = arch_map
-                  elif "url" in data:
+                      if has_arch_urls:
+                          pkg_info["architecture"] = arch_map
+
+                  if not has_arch_urls and "url" in data:
                       pkg_info["url"] = data.get("url")
                       if "hash" in data:
                           pkg_info["hash"] = data.get("hash")

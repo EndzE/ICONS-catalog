@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-10-31T06:52:52.576524+00:00",
+  "last_updated": "2026-10-31T11:13:00+00:00",
   "packages": {
     "aria2-next": {
       "version": "3.0.9",
@@ -57,6 +57,36 @@
       "license": "MS-RL",
       "url": "https://raw.githubusercontent.com/ScoopInstaller/Binary/master/dark/dark-3.14.1.zip",
       "hash": "cad986d43d59ed27c711b15113ea118c3a600c7e625130201ba946bcc70f5905"
+    },
+    "rufus": {
+      "version": "4.15",
+      "tier": "catalog",
+      "description": "A utility that helps format and create bootable USB flash drives.",
+      "homepage": "https://rufus.ie/",
+      "license": "GPL-3.0-only",
+      "architecture": {
+        "64bit": {
+          "url": "https://github.com/pbatard/rufus/releases/download/v4.15/rufus-4.15.exe#/rufus.exe",
+          "hash": "84c8a437f8af89257524478489e5c85f1edf25f761d299e2bcde46ac0afbe106"
+        },
+        "32bit": {
+          "url": "https://github.com/pbatard/rufus/releases/download/v4.15/rufus-4.15_x86.exe#/rufus.exe",
+          "hash": "20e1345715aff4aebf016839f721390882201a2b5d00655424c4ca38cb919576"
+        },
+        "arm64": {
+          "url": "https://github.com/pbatard/rufus/releases/download/v4.15/rufus-4.15_arm64.exe#/rufus.exe",
+          "hash": "af01a2136db7391eb8a52de7001fd231f0731cd27e042318dc2743d87fa35c1c"
+        }
+      }
+    },
+    "ventoy": {
+      "version": "1.1.18",
+      "tier": "catalog",
+      "description": "Bootable USB drive creator",
+      "homepage": "https://www.ventoy.net/en/index.html",
+      "license": "GPL-3.0-or-later",
+      "url": "https://github.com/ventoy/Ventoy/releases/download/v1.1.18/ventoy-1.1.18-windows.zip",
+      "hash": "082c478e8c432e1ac653899fcf50e3a4077a2851bc6112b5ddd30545962164a9"
     }
   }
 }
