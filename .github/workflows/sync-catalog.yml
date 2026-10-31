@@ -1,0 +1,112 @@
+name: Sync Catalog
+
+on:
+  schedule:
+    # Runs every 6 hours (00:00, 06:00, 12:00, 18:00 UTC)
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Sync upstream manifests
+        run: |
+          echo "Cloning ScoopInstaller/Main..."
+          git clone --depth 1 https://github.com/ScoopInstaller/Main.git /tmp/scoop-main
+
+          mkdir -p bucket
+
+          python3 - << 'EOF'
+          import json
+          import os
+          import shutil
+
+          with open('curated-sources.json', 'r', encoding='utf-8') as f:
+              sources = json.load(f)
+
+          for pkg in sources.get('packages', []):
+              name = pkg['name']
+              bucket = pkg.get('bucket', 'main')
+              if bucket == 'main':
+                  src = f"/tmp/scoop-main/bucket/{name}.json"
+                  dst = f"bucket/{name}.json"
+                  if os.path.exists(src):
+                      shutil.copy2(src, dst)
+                      print(f"Synced {name} from {bucket}")
+                  else:
+                      print(f"Warning: {src} not found")
+          EOF
+
+      - name: Generate index.json
+        run: |
+          python3 - << 'EOF'
+          import json
+          import os
+          from datetime import datetime, timezone
+
+          with open('curated-sources.json', 'r', encoding='utf-8') as f:
+              sources = json.load(f)
+
+          packages_meta = {}
+          for pkg in sources.get('packages', []):
+              name = pkg['name']
+              tier = pkg.get('tier', 'catalog')
+              manifest_path = f"bucket/{name}.json"
+
+              if os.path.exists(manifest_path):
+                  with open(manifest_path, 'r', encoding='utf-8') as mf:
+                      data = json.load(mf)
+
+                  pkg_info = {
+                      "version": data.get("version"),
+                      "tier": tier,
+                      "description": data.get("description", ""),
+                      "homepage": data.get("homepage", ""),
+                      "license": data.get("license", "")
+                  }
+
+                  if "architecture" in data:
+                      pkg_info["architecture"] = data["architecture"]
+                  elif "url" in data:
+                      pkg_info["url"] = data.get("url")
+                      if "hash" in data:
+                          pkg_info["hash"] = data.get("hash")
+
+                  packages_meta[name] = pkg_info
+
+          index_data = {
+              "version": 1,
+              "last_updated": datetime.now(timezone.utc).isoformat(),
+              "packages": packages_meta
+          }
+
+          with open('index.json', 'w', encoding='utf-8') as f:
+              json.dump(index_data, f, indent=2, ensure_ascii=False)
+              f.write('\n')
+
+          print(f"Generated index.json with {len(packages_meta)} package(s).")
+          EOF
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add bucket/ index.json
+          if git diff --staged --quiet; then
+            echo "No changes detected. Catalog is up to date."
+          else
+            git commit -m "chore(catalog): sync upstream manifests and update index"
+            git push
+          fi
