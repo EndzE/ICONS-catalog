@@ -9,6 +9,16 @@
       "name": "7zip",
       "bucket": "main",
       "tier": "core"
+    },
+    {
+      "name": "innounp",
+      "bucket": "main",
+      "tier": "core"
+    },
+    {
+      "name": "dark",
+      "bucket": "main",
+      "tier": "core"
     }
   ]
 }
